@@ -1,0 +1,1257 @@
+/* ==========================================================================
+   RESET & VARIABLES
+   ========================================================================== */
+:root {
+  --bg-white: #FAFAFA;
+  --text-dark: #111111;
+  --text-muted: #777777;
+  --rose-accent: #FF2A85; /* Le rose réclamé pour Arttrixx Gallery */
+  --border-light: rgba(0, 0, 0, 0.08);
+  --font-title: 'Syne', sans-serif;
+  --font-body: 'Plus Jakarta Sans', sans-serif;
+  --font-mono: 'Space Mono', monospace;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background-color: var(--bg-white);
+  color: var(--text-dark);
+  font-family: var(--font-body);
+  overflow-x: hidden;
+}
+
+/* ==========================================================================
+   1. PRELOADER (PAGE DE CHARGEMENT 3 SECONDES)
+   ========================================================================== */
+.preloader {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100vh;
+  background-color: var(--bg-white);
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.8s ease;
+}
+
+.preloader.fade-out {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.preloader-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+/* MONOGRAMME AG FUSIONNÉ */
+.monogram-container {
+  margin-bottom: 1rem;
+}
+
+.monogram-text {
+  font-family: var(--font-title);
+  font-size: 8rem;
+  font-weight: 800;
+  color: var(--rose-accent);
+  line-height: 0.9;
+  letter-spacing: -18px; /* Effet de rapprochement pour la fusion */
+  display: inline-block;
+  user-select: none;
+}
+
+.fused-g {
+  display: inline-block;
+  transform: translateX(-12px); /* Fusionne le G dans le A */
+  opacity: 0.92;
+}
+
+/* SOUS-TITRE ARTTRIXX GALLERY */
+.gallery-subtitle {
+  font-family: var(--font-mono);
+  font-size: 1.1rem;
+  text-transform: uppercase;
+  letter-spacing: 6px;
+  color: var(--text-dark);
+  font-weight: 400;
+  margin-bottom: 2.5rem;
+}
+
+/* JAUGE DE CHARGEMENT */
+.progress-bar-track {
+  width: 220px;
+  height: 3px;
+  background-color: rgba(0, 0, 0, 0.08);
+  border-radius: 10px;
+  overflow: hidden;
+  position: relative;
+}
+
+.progress-bar-fill {
+  width: 0%;
+  height: 100%;
+  background-color: var(--rose-accent);
+  border-radius: 10px;
+  /* L'animation dure exactement 3 secondes */
+  transition: width 3s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+/* ==========================================================================
+   2. NAVBAR & NAVIGATION
+   ========================================================================== */
+.main-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1000;
+  padding: 1.5rem 2.5rem;
+  background: rgba(250, 250, 250, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border-light);
+}
+
+.header-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.nav-logo {
+  font-family: var(--font-title);
+  font-size: 1.3rem;
+  font-weight: 800;
+  color: var(--rose-accent);
+  text-decoration: none;
+  letter-spacing: -0.5px;
+}
+
+.desktop-nav {
+  display: flex;
+  gap: 2.5rem;
+}
+
+.desktop-nav a {
+  text-decoration: none;
+  color: var(--text-dark);
+  font-size: 0.92rem;
+  font-weight: 500;
+  transition: color 0.3s ease;
+}
+
+.desktop-nav a:hover {
+  color: var(--rose-accent);
+}
+
+.nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 1.2rem;
+}
+
+/* PANIER */
+.cart-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--text-dark);
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cart-count {
+  position: absolute;
+  top: -6px;
+  right: -8px;
+  background-color: var(--rose-accent);
+  color: #FFFFFF;
+  font-size: 0.7rem;
+  font-weight: 700;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* BOUTON BURGER (MOBILE) */
+.burger-btn {
+  display: none; /* Masqué sur PC */
+  background: none;
+  border: none;
+  cursor: pointer;
+  flex-direction: column;
+  gap: 5px;
+  padding: 4px;
+}
+
+.burger-line {
+  width: 24px;
+  height: 2px;
+  background-color: var(--text-dark);
+  transition: all 0.3s ease;
+}
+
+/* ==========================================================================
+   3. MENU BURGER MOBILE (GLISSANT DEPUIS LA DROITE)
+   ========================================================================== */
+.mobile-drawer-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(4px);
+  z-index: 1500;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.4s ease;
+}
+
+.mobile-drawer-overlay.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+.mobile-drawer {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 85%;
+  max-width: 400px;
+  height: 100vh;
+  background-color: var(--bg-white);
+  z-index: 1600;
+  padding: 2.5rem 2rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transform: translateX(100%); /* Caché à droite */
+  transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: -10px 0 30px rgba(0, 0, 0, 0.1);
+}
+
+.mobile-drawer.active {
+  transform: translateX(0); /* Glisse vers la gauche */
+}
+
+.drawer-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid var(--border-light);
+}
+
+.drawer-tag {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.close-drawer-btn {
+  background: none;
+  border: none;
+  font-size: 2rem;
+  cursor: pointer;
+  color: var(--text-dark);
+  line-height: 1;
+}
+
+.mobile-nav-links {
+  display: flex;
+  flex-direction: column;
+  gap: 1.8rem;
+  margin: 2rem 0;
+}
+
+.drawer-link {
+  text-decoration: none;
+  font-family: var(--font-title);
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--text-dark);
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  transition: color 0.3s ease;
+}
+
+.drawer-link span {
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  color: var(--rose-accent);
+  font-weight: 400;
+}
+
+.drawer-link:hover {
+  color: var(--rose-accent);
+}
+
+.drawer-footer {
+  border-top: 1px solid var(--border-light);
+  padding-top: 1.5rem;
+}
+
+.drawer-brand {
+  font-family: var(--font-title);
+  font-weight: 800;
+  font-size: 1.1rem;
+}
+
+.drawer-sub {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+.drawer-credit {
+  margin-top: 1.25rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--border-light);
+  font-size: 0.78rem;
+  color: var(--text-muted);
+}
+
+.drawer-credit strong {
+  color: var(--text-dark);
+  font-weight: 700;
+}
+
+.drawer-credit a {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  margin-top: 0.45rem;
+  color: var(--rose-accent);
+  font-weight: 700;
+  text-decoration: none;
+  transition: opacity 0.2s ease;
+}
+
+.drawer-credit a:hover {
+  opacity: 0.75;
+}
+
+/* ==========================================================================
+   4. HERO SECTION WITH MOTION DESIGN VIDEO
+   ========================================================================== */
+.hero-section {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  padding: 0 2rem;
+}
+
+.hero-image-wrapper {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+}
+
+.hero-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: brightness(0.65) contrast(1.1);
+}
+
+.hero-video-overlay {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle, rgba(0, 0, 0, 0.2) 0%, rgba(0, 0, 0, 0.6) 100%);
+}
+
+.hero-content {
+  position: relative;
+  z-index: 10;
+  text-align: center;
+  color: #FFFFFF;
+  max-width: 800px;
+}
+
+.hero-badge {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: var(--rose-accent);
+  background: rgba(255, 42, 133, 0.15);
+  border: 1px solid var(--rose-accent);
+  padding: 0.4rem 1.2rem;
+  border-radius: 30px;
+  margin-bottom: 1.5rem;
+}
+
+.hero-title {
+  font-family: var(--font-title);
+  font-size: 3.8rem;
+  font-weight: 800;
+  line-height: 1.1;
+  margin-bottom: 1.2rem;
+}
+
+.hero-description {
+  font-size: 1.1rem;
+  color: rgba(255, 255, 255, 0.85);
+  margin-bottom: 2.5rem;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+  line-height: 1.6;
+}
+
+.hero-cta-group {
+  display: flex;
+  gap: 1.2rem;
+  justify-content: center;
+}
+
+.btn-primary {
+  background-color: var(--rose-accent);
+  color: #FFFFFF;
+  text-decoration: none;
+  padding: 1rem 2rem;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  clip-path: polygon(10px 0, 100% 0, calc(100% - 10px) 100%, 0 100%);
+  font-weight: 700;
+  font-size: 0.95rem;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px rgba(255, 42, 133, 0.4);
+}
+
+.btn-secondary {
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(8px);
+  color: #FFFFFF;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  text-decoration: none;
+  padding: 1rem 2rem;
+  clip-path: polygon(10px 0, 100% 0, calc(100% - 10px) 100%, 0 100%);
+  font-weight: 600;
+  font-size: 0.95rem;
+  transition: all 0.3s ease;
+}
+
+.btn-secondary:hover {
+  background: #FFFFFF;
+  color: var(--text-dark);
+}
+
+/* RESPONSIVE MOBILE */
+@media (max-width: 850px) {
+  .desktop-nav {
+    display: none;
+  }
+  .burger-btn {
+    display: flex;
+  }
+  .monogram-text {
+    font-size: 6rem;
+  }
+  .hero-title {
+    font-size: 2.4rem;
+  }
+  .hero-cta-group {
+    flex-direction: column;
+  }
+}
+
+/* ==========================================================================
+   TRANSITION DU HERO AU SCROLL
+   ========================================================================== */
+.hero-sticky-section {
+  position: relative;
+  height: 220vh; /* Espace de défilement pour jouer l’animation avant la section suivante */
+  background-color: #FAFAFA;
+}
+
+.hero-sticky-container {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background-color: #FAFAFA;
+}
+
+.hero-image-zoom {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  will-change: transform, border-radius;
+  overflow: hidden;
+}
+
+.hero-image-zoom img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: brightness(0.75);
+}
+
+.hero-dark-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.25);
+}
+
+.hero-text-content {
+  position: relative;
+  z-index: 10;
+  text-align: center;
+  color: #FFFFFF;
+  max-width: 800px;
+  padding: 0 2rem;
+  will-change: opacity, transform;
+}
+
+.hero-badge {
+  display: inline-block;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: #FF2A85;
+  background: rgba(255, 42, 133, 0.15);
+  border: 1px solid #FF2A85;
+  padding: 0.4rem 1.2rem;
+  border-radius: 30px;
+  margin-bottom: 1.5rem;
+}
+
+.hero-title {
+  font-family: 'Syne', sans-serif;
+  font-size: 3.8rem;
+  font-weight: 800;
+  line-height: 1.1;
+  margin-bottom: 1.2rem;
+}
+
+.hero-description {
+  font-size: 1.1rem;
+  color: rgba(255, 255, 255, 0.85);
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.hero-text-content .hero-cta-group {
+  margin-top: 2rem;
+}
+
+/* ==========================================================================
+   SECTION POPULAIRES — EFFET TOILES DE GALERIE
+   ========================================================================== */
+.popular-art-section {
+  position: relative;
+  z-index: 20;
+  background-color: #FAFAFA;
+  padding: 8rem 2.5rem;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.section-header {
+  text-align: center;
+  margin-bottom: 5rem;
+}
+
+.section-tag {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  color: #FF2A85;
+  font-weight: 600;
+}
+
+.section-title {
+  font-family: 'Syne', sans-serif;
+  font-size: 3rem;
+  font-weight: 800;
+  color: #111111;
+  margin: 0.8rem 0;
+}
+
+.section-subtitle {
+  color: #666666;
+  font-size: 1.05rem;
+}
+
+/* GRILLE & CARTE STYLE CHÂSSIS DE TOILE */
+.art-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 3.5rem;
+}
+
+.art-canvas-card {
+  background: #FFFFFF;
+  padding: 1.2rem 1.2rem 1.8rem 1.2rem;
+  border-radius: 4px;
+  /* Ombre portée imitant le relief d'une toile d'art accrochée au mur */
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.06), 0 1px 3px rgba(0, 0, 0, 0.04);
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s ease;
+  cursor: pointer;
+}
+
+.art-canvas-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.12), 0 4px 8px rgba(0, 0, 0, 0.05);
+}
+
+.canvas-frame {
+  position: relative;
+  width: 100%;
+  height: 420px;
+  background: #F0F0EE;
+  overflow: hidden;
+  margin-bottom: 1.5rem;
+}
+
+.canvas-frame img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.art-canvas-card:hover .canvas-frame img {
+  transform: scale(1.04);
+}
+
+.canvas-badge {
+  position: absolute;
+  top: 15px;
+  left: 15px;
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(4px);
+  color: #111111;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  padding: 0.4rem 0.8rem;
+  border-radius: 20px;
+  font-weight: 600;
+}
+
+/* CARTEL DE MUSÉE (INFORMATIONS EN BAS) */
+.canvas-cartel {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1rem;
+  border-top: 1px solid rgba(0, 0, 0, 0.06);
+  padding-top: 1.2rem;
+}
+
+.art-name {
+  font-family: 'Syne', sans-serif;
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #111111;
+  margin-bottom: 0.3rem;
+}
+
+.art-medium {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.78rem;
+  color: #666666;
+}
+
+.art-price {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #FF2A85;
+  white-space: nowrap;
+}
+
+.add-to-cart-btn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 1.25rem;
+  padding: 0.9rem 1rem;
+  border: 1px solid var(--rose-accent);
+  background: transparent;
+  color: var(--rose-accent);
+  font: 700 0.9rem var(--font-body);
+  cursor: pointer;
+  transition: background-color 0.25s ease, color 0.25s ease, transform 0.25s ease;
+}
+
+.add-to-cart-btn span {
+  font-size: 1.25rem;
+  line-height: 1;
+}
+
+.add-to-cart-btn:hover,
+.add-to-cart-btn:focus-visible {
+  background: var(--rose-accent);
+  color: #FFFFFF;
+}
+
+.add-to-cart-btn:active {
+  transform: scale(0.98);
+}
+
+.cart-toast {
+  position: fixed;
+  right: 1.5rem;
+  bottom: 1.5rem;
+  z-index: 2000;
+  max-width: min(24rem, calc(100vw - 3rem));
+  padding: 1rem 1.25rem;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  background: #111111;
+  color: #FFFFFF;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);
+  font-size: 0.9rem;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(0.75rem);
+  transition: opacity 0.25s ease, transform 0.25s ease, visibility 0.25s ease;
+}
+
+.cart-toast.visible {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+@media (max-width: 1024px) {
+  .art-grid {
+    grid-template-columns: 1fr;
+    gap: 3rem;
+  }
+  .hero-title {
+    font-size: 2.5rem;
+  }
+}
+
+/* ==========================================================================
+   SECTION À PROPOS DE L'ARTISTE
+   ========================================================================== */
+.about-artist-section {
+  position: relative;
+  height: 220vh; /* Hauteur nécessaire pour piloter l'animation au scroll */
+  background-color: #FAFAFA;
+}
+
+.about-sticky-viewport {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  width: 100%;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* 1. COUCHE INTRODUCTIVE (GRAND TITRE SUR FOND D'IMAGE) */
+.about-hero-intro {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url('https://images.unsplash.com/photo-1513364776144-60967b0f800f?auto=format&fit=crop&q=80&w=1600');
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  z-index: 10;
+  will-change: opacity, transform;
+  transition: transform 0.1s linear;
+}
+
+.about-bg-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(10, 10, 10, 0.65);
+  backdrop-filter: blur(3px);
+}
+
+.about-intro-content {
+  position: relative;
+  z-index: 2;
+  color: #FFFFFF;
+  padding: 0 2rem;
+}
+
+.about-tag {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  color: #FF2A85;
+  font-weight: 600;
+}
+
+.about-big-title {
+  font-family: 'Syne', sans-serif;
+  font-size: 4rem;
+  font-weight: 800;
+  margin: 1rem 0;
+  line-height: 1.1;
+  letter-spacing: -1px;
+}
+
+.scroll-hint {
+  display: inline-block;
+  margin-top: 2rem;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: rgba(255, 255, 255, 0.6);
+  animation: pulseHint 2s infinite ease-in-out;
+}
+
+@keyframes pulseHint {
+  0%, 100% { opacity: 0.4; transform: translateY(0); }
+  50% { opacity: 1; transform: translateY(5px); }
+}
+
+
+/* 2. COUCHE BILATÉRALE (PHOTO À GAUCHE & TEXTE À DROITE) */
+.about-split-content {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #FAFAFA;
+  display: grid;
+  grid-template-columns: 1fr 1.1fr;
+  gap: 5rem;
+  align-items: center;
+  padding: 0 8rem;
+  z-index: 5;
+  box-sizing: border-box;
+}
+
+/* PHOTO DE L'ARTISTE (ARRIVE DE LA GAUCHE) */
+.about-image-wrapper {
+  position: relative;
+  width: 100%;
+  height: 520px;
+  border-radius: 6px;
+  overflow: hidden;
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.1);
+  will-change: transform, opacity;
+  /* État initial : décalé vers la gauche et invisible */
+  transform: translateX(-120px);
+  opacity: 0;
+  transition: transform 0.1s linear, opacity 0.1s linear;
+}
+
+.about-image-wrapper img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.artist-badge {
+  position: absolute;
+  bottom: 20px;
+  left: 20px;
+  background: rgba(250, 250, 250, 0.9);
+  backdrop-filter: blur(6px);
+  color: #111111;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  padding: 0.5rem 1rem;
+  border-radius: 30px;
+  font-weight: 600;
+}
+
+/* TEXTE DE PRÉSENTATION (À DROITE) */
+.about-text-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+  will-change: transform, opacity;
+  /* État initial : légèrement décalé vers la droite et invisible */
+  transform: translateX(60px);
+  opacity: 0;
+  transition: transform 0.1s linear, opacity 0.1s linear;
+}
+
+.text-subtitle {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: #FF2A85;
+  font-weight: 600;
+}
+
+.artist-name {
+  font-family: 'Syne', sans-serif;
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: #111111;
+  line-height: 1.15;
+}
+
+.artist-bio {
+  font-size: 1.05rem;
+  color: #444444;
+  line-height: 1.7;
+}
+
+.artist-bio-sub {
+  font-size: 0.95rem;
+  color: #666666;
+  font-style: italic;
+  border-left: 2px solid #FF2A85;
+  padding-left: 1rem;
+  margin: 0.5rem 0;
+  line-height: 1.6;
+}
+
+.artist-signature {
+  margin-top: 1rem;
+  font-family: 'Syne', sans-serif;
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #111111;
+  letter-spacing: 1px;
+}
+
+/* RESPONSIVE */
+@media (max-width: 1024px) {
+  .about-split-content {
+    grid-template-columns: 1fr;
+    padding: 0 2rem;
+    gap: 2.5rem;
+    overflow-y: auto;
+  }
+  .about-image-wrapper {
+    height: 350px;
+  }
+  .about-big-title {
+    font-size: 2.8rem;
+  }
+  .artist-name {
+    font-size: 2rem;
+  }
+}
+
+/* ==========================================================================
+   SECTION CONTACT
+   ========================================================================== */
+.contact-gallery-section {
+  position: relative;
+  background-color: #FAFAFA;
+  padding: 8rem 2.5rem;
+  border-top: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.contact-container {
+  max-width: 1300px;
+  margin: 0 auto;
+}
+
+.contact-header {
+  text-align: center;
+  max-width: 700px;
+  margin: 0 auto 5rem auto;
+}
+
+.contact-tag {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  color: #FF2A85;
+  font-weight: 600;
+}
+
+.contact-title {
+  font-family: 'Syne', sans-serif;
+  font-size: 3rem;
+  font-weight: 800;
+  color: #111111;
+  margin: 0.8rem 0;
+}
+
+.contact-subtitle {
+  color: #666666;
+  font-size: 1.05rem;
+  line-height: 1.6;
+}
+
+/* GRILLE CONTACT */
+.contact-grid {
+  display: grid;
+  grid-template-columns: 1.3fr 1fr;
+  gap: 4rem;
+  align-items: flex-start;
+}
+
+.contact-form {
+  background: #FFFFFF;
+  padding: 3rem;
+  border-radius: 8px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.04);
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  display: flex;
+  flex-direction: column;
+  gap: 1.8rem;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+}
+
+.input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.input-group label {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: #444444;
+  font-weight: 600;
+}
+
+.input-group input,
+.input-group select,
+.input-group textarea {
+  width: 100%;
+  background: #FAFAFA;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 6px;
+  padding: 1rem 1.2rem;
+  color: #111111;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 0.95rem;
+  outline: none;
+  transition: all 0.3s ease;
+}
+
+.input-group input:focus,
+.input-group select:focus,
+.input-group textarea:focus {
+  border-color: #FF2A85;
+  background: #FFFFFF;
+  box-shadow: 0 0 10px rgba(255, 42, 133, 0.1);
+}
+
+.input-group select option {
+  background: #FFFFFF;
+  color: #111111;
+}
+
+.input-group textarea {
+  resize: vertical;
+  min-height: 130px;
+}
+
+.btn-submit-contact {
+  background-color: #111111;
+  color: #FFFFFF;
+  border: none;
+  padding: 1.1rem 2rem;
+  border-radius: 30px;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.8rem;
+  transition: all 0.3s ease;
+}
+
+.btn-submit-contact:hover {
+  background-color: #FF2A85;
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px rgba(255, 42, 133, 0.3);
+}
+
+/* CARTE INFOS CONTACT */
+.contact-info-card {
+  background: #111111;
+  color: #FFFFFF;
+  padding: 3rem;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 2.2rem;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+}
+
+.info-block h3 {
+  font-family: 'Syne', sans-serif;
+  font-size: 1.2rem;
+  margin-bottom: 0.5rem;
+  color: #FF2A85;
+}
+
+.info-block p {
+  color: rgba(255, 255, 255, 0.75);
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+
+.social-links {
+  display: flex;
+  gap: 1.5rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  padding-top: 1.5rem;
+}
+
+.social-links a {
+  color: #FFFFFF;
+  text-decoration: none;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.85rem;
+  transition: color 0.3s ease;
+}
+
+.social-links a:hover {
+  color: #FF2A85;
+}
+
+
+/* ==========================================================================
+   FOOTER MINIMALISTE
+   ========================================================================== */
+.main-footer-art {
+  background-color: #0A0A0A;
+  color: #FFFFFF;
+  padding: 5rem 2.5rem 3rem 2.5rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.footer-container {
+  max-width: 1300px;
+  margin: 0 auto;
+}
+
+.footer-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 4rem;
+  padding-bottom: 4rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.footer-logo {
+  font-family: 'Syne', sans-serif;
+  font-size: 1.6rem;
+  font-weight: 800;
+  margin-bottom: 0.8rem;
+  color: #FFFFFF;
+}
+
+.footer-brand-desc {
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 0.95rem;
+  max-width: 350px;
+  line-height: 1.6;
+}
+
+.footer-nav-cols {
+  display: flex;
+  gap: 5rem;
+}
+
+.footer-col {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.footer-col h4 {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: #FF2A85;
+  margin-bottom: 0.5rem;
+}
+
+.footer-col a {
+  text-decoration: none;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.92rem;
+  transition: color 0.3s ease;
+}
+
+.footer-col a:hover {
+  color: #FFFFFF;
+}
+
+.footer-bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 2.5rem;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.4);
+}
+
+/* RESPONSIVE */
+@media (max-width: 1024px) {
+  .contact-grid, .footer-top, .form-row {
+    grid-template-columns: 1fr;
+    gap: 2.5rem;
+  }
+  .footer-nav-cols {
+    flex-direction: column;
+    gap: 2rem;
+  }
+  .footer-bottom {
+    flex-direction: column;
+    gap: 1rem;
+    text-align: center;
+  }
+}

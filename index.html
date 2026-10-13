@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Arttrixx Gallery — Art & Streetwear Contemporain</title>
+  
+  <!-- TYPOGRAPHIES GOOGLE (Syne, Plus Jakarta Sans, Space Mono) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Space+Mono&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- ==========================================
+       1. PRELOADER / PAGE DE CHARGEMENT FACTICE
+       ========================================== -->
+  <div class="preloader" id="preloader">
+    <div class="preloader-content">
+      
+      <!-- MONOGRAMME AG FUSIONNÉ -->
+      <div class="monogram-container">
+        <span class="monogram-text">A<span class="fused-g">G</span></span>
+      </div>
+
+      <!-- SOUS-TITRE -->
+      <h1 class="gallery-subtitle">Arttrixx Gallery</h1>
+
+      <!-- JAUGE DE CHARGEMENT DE 3 SECONDES -->
+      <div class="progress-bar-track">
+        <div class="progress-bar-fill" id="progressFill"></div>
+      </div>
+
+    </div>
+  </div>
+
+
+  <!-- ==========================================
+       2. NAVBAR & NAVIGATION MOBILE
+       ========================================== -->
+  <header class="main-header">
+    <div class="header-container">
+      
+      <!-- LOGO TEXTE -->
+      <a href="#" class="nav-logo">
+        Arttrixx Gallery
+      </a>
+
+      <!-- NAVIGATION DESKTOP -->
+      <nav class="desktop-nav">
+        <a href="#collections">Collections</a>
+        <a href="#tableaux">Tableaux</a>
+        <a href="#streetwear">T-Shirts & Pulls</a>
+        <a href="#about">L'Artiste</a>
+      </nav>
+
+      <!-- ACTIONS DROITE (PANIER + BURGER SUR MOBILE) -->
+      <div class="nav-actions">
+        
+        <!-- BOUTON PANIER -->
+        <button class="cart-btn" aria-label="Panier">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+            <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <path d="M16 10a4 4 0 0 1-8 0"></path>
+          </svg>
+          <span class="cart-count" aria-live="polite">0</span>
+        </button>
+
+        <!-- BOUTON BURGER (MOBILE) — APRES LE PANIER -->
+        <button class="burger-btn" id="burgerBtn" aria-label="Menu">
+          <span class="burger-line"></span>
+          <span class="burger-line"></span>
+        </button>
+
+      </div>
+
+    </div>
+  </header>
+
+
+  <!-- MENU TIROIR MOBILE GLISSANT DEPUIS LA DROITE -->
+  <div class="mobile-drawer-overlay" id="drawerOverlay"></div>
+  <aside class="mobile-drawer" id="mobileDrawer">
+    <div class="drawer-header">
+      <span class="drawer-tag">Navigation</span>
+      <button class="close-drawer-btn" id="closeDrawerBtn" aria-label="Fermer le menu">&times;</button>
+    </div>
+
+    <nav class="mobile-nav-links">
+      <a href="#collections" class="drawer-link"><span>01</span> Collections</a>
+      <a href="#tableaux" class="drawer-link"><span>02</span> Tableaux & Toiles</a>
+      <a href="#streetwear" class="drawer-link"><span>03</span> T-Shirts & Pulls</a>
+      <a href="#about" class="drawer-link"><span>04</span> L'Artiste</a>
+      <a href="#contact" class="drawer-link"><span>05</span> Contact / Exposition</a>
+    </nav>
+
+    <div class="drawer-footer">
+      <p class="drawer-brand">Arttrixx Gallery</p>
+      <span class="drawer-sub">Éditions Limitées & Pièces Uniques</span>
+      <div class="drawer-credit">
+        <p>Site réalisé par <strong>Digital Dream</strong></p>
+        <!-- Remplace l’URL ci-dessous par le lien de ton portfolio. -->
+        <a href="https://votre-portfolio.com" target="_blank" rel="noopener noreferrer">
+          Contacter le concepteur
+        </a>
+      </div>
+    </div>
+  </aside>
+
+
+  <main>
+<!-- HERO FIXE AU SCROLL : L’IMAGE SE RÉTRÉCIT AVANT LA SECTION POPULAIRE -->
+<section class="hero-sticky-section" id="heroSection">
+  <div class="hero-sticky-container" id="heroContainer">
+    
+    <!-- IMAGE DU HERO (RÉTRÉCIT VERS LE CENTRE AU SCROLL) -->
+    <div class="hero-image-zoom" id="heroImageWrapper">
+      <img src="https://i.pinimg.com/1200x/6e/ac/f8/6eacf8e7594f6caefe78d98a16f4cb31.jpg" alt="Arttrixx Gallery Hero" />
+      <div class="hero-dark-overlay"></div>
+    </div>
+
+    <!-- TEXTES ET BOUTONS DU HERO (S'EFFACENT EN PREMIER AU SCROLL) -->
+    <div class="hero-text-content" id="heroTextContent">
+      
+      <h2 class="hero-title">Là où l'Art Rencontre la Rue</h2>
+      <p class="hero-description">Toiles originales, pièces textiles exclusives et art contemporain brut.</p>
+      <div class="hero-cta-group">
+        <a href="#popular" class="btn-primary">Découvrir les œuvres</a>
+        <a href="#popular" class="btn-secondary">Voir la sélection</a>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- SECTION DES ÉLÉMENTS LES PLUS POPULAIRES (STYLE VRAIES TOILES D'ART) -->
+<section class="popular-art-section" id="popular">
+  <div class="section-header">
+    
+    <h2 class="section-title">Les Plus Populaires</h2>
+    <p class="section-subtitle">Chaque œuvre et vêtement est pensé comme une pièce de collection unique.</p>
+  </div>
+
+  <div class="art-grid">
+    
+    <!-- TOILE 1 : TABLEAU -->
+    <div class="art-canvas-card">
+      <div class="canvas-frame">
+        <img src="https://i.pinimg.com/1200x/bc/8f/e9/bc8fe94478e088628f03a5ab38972895.jpg" alt="Écho Urbain" />
+        <div class="canvas-badge">Pièce Unique</div>
+      </div>
+      <div class="canvas-cartel">
+        <div class="cartel-info">
+          <h3 class="art-name">« Écho Urbain »</h3>
+          <p class="art-medium">Huile & Acrylique sur toile • 120x90cm</p>
+        </div>
+        <span class="art-price">450.000 FCFA</span>
+      </div>
+      <button class="add-to-cart-btn" type="button" data-product-name="Écho Urbain">
+        Ajouter au panier <span aria-hidden="true">+</span>
+      </button>
+    </div>
+
+    <!-- TOILE 2 : SWEAT / PULL -->
+    <div class="art-canvas-card">
+      <div class="canvas-frame">
+        <img src="https://i.pinimg.com/736x/0c/e8/da/0ce8da66db411501fbb5ce97796eef50.jpg" alt="Hoodie Arttrixx" />
+        <div class="canvas-badge">Édition Limitée</div>
+      </div>
+      <div class="canvas-cartel">
+        <div class="cartel-info">
+          <h3 class="art-name">Hoodie Oversize « Arttrixx Signature »</h3>
+          <p class="art-medium">Coton 480 GSM • Broderie artisanale</p>
+        </div>
+        <span class="art-price">85.000 FCFA</span>
+      </div>
+      <button class="add-to-cart-btn" type="button" data-product-name="Hoodie Oversize Arttrixx Signature">
+        Ajouter au panier <span aria-hidden="true">+</span>
+      </button>
+    </div>
+
+    <!-- TOILE 3 : TABLEAU -->
+    <div class="art-canvas-card">
+      <div class="canvas-frame">
+        <img src="https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?auto=format&fit=crop&q=80&w=800" alt="Mémoire de Formes" />
+        <div class="canvas-badge">Signé par l'Artiste</div>
+      </div>
+      <div class="canvas-cartel">
+        <div class="cartel-info">
+          <h3 class="art-name">« Mémoire de Formes »</h3>
+          <p class="art-medium">Technique mixte sur lin • 100x100cm</p>
+        </div>
+        <span class="art-price">380.000 FCFA</span>
+      </div>
+      <button class="add-to-cart-btn" type="button" data-product-name="Mémoire de Formes">
+        Ajouter au panier <span aria-hidden="true">+</span>
+      </button>
+    </div>
+
+  </div>
+</section>
+  </main>
+
+  <div class="cart-toast" id="cartToast" role="status" aria-live="polite"></div>
+
+<!-- SECTION À PROPOS DE L'ARTISTE (STICKY & TRANSITION) -->
+<section class="about-artist-section" id="about">
+  <div class="about-sticky-viewport">
+    
+    <!-- COUCHE 1 : BACKGROUND IMAGE AVEC LE GRAND TITRE (S'EFFACE AU SCROLL) -->
+    <div class="about-hero-intro" id="aboutIntro">
+      <div class="about-bg-overlay"></div>
+      <div class="about-intro-content">
+        <span class="about-tag">-- L'Atelier --</span>
+        <h2 class="about-big-title">À propos de notre artiste</h2>
+        <span class="scroll-hint">Scrollez pour découvrir</span>
+      </div>
+    </div>
+
+    <!-- COUCHE 2 : LA SECTION BILATÉRALE (PHOTO À GAUCHE QUI VIENT DE LA GAUCHE + TEXTE À DROITE) -->
+    <div class="about-split-content" id="aboutSplit">
+      
+      <!-- PHOTO DE L'ARTISTE (ARRIVE DE LA GAUCHE) -->
+      <div class="about-image-wrapper" id="aboutImage">
+        <img src="https://i.pinimg.com/1200x/ee/b3/5a/eeb35a372b8b3dd3326f241c66ee1c6d.jpg" alt="L'Artiste Arttrixx" />
+        <div class="artist-badge">Fondateur & Directeur Artistique</div>
+      </div>
+
+      <!-- TEXTE DE PRÉSENTATION (À DROITE) -->
+      <div class="about-text-wrapper" id="aboutText">
+        <span class="text-subtitle">Vision & Mouvement</span>
+        <h3 class="artist-name">Derrière la toile et le textile</h3>
+        <p class="artist-bio">
+          Né à la croisée des arts plastiques et de la culture streetwear, Arttrixx explore les textures, les contrastes et l'émotion brute. Chaque tableau est une pièce unique conçue comme un portail introspectif, tandis que chaque vêtement insuffle l'esprit de la galerie dans le vestiaire urbain quotidien.
+        </p>
+        <p class="artist-bio-sub">
+          « L'art ne doit pas seulement être contemplé dans le silence d'un musée ; il doit vibrer, se porter et vivre au rythme de la rue. »
+        </p>
+        
+        <div class="artist-signature">
+          <span>Arttrixx</span>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</section>
+
+<!-- ==========================================
+     SECTION CONTACT / ÉCHANGES & ACQUISITIONS
+     ========================================== -->
+<section class="contact-gallery-section" id="contact">
+  <div class="contact-container">
+    
+    <!-- EN-TÊTE DE SECTION -->
+    <div class="contact-header">
+      
+      <h2 class="contact-title">Entrer en contact</h2>
+      <p class="contact-subtitle">
+        Questions sur une œuvre, acquisition d'une pièce unique ou commande de pièces textiles sur-mesure. Écrivez-nous.
+      </p>
+    </div>
+
+    <!-- CORPS DU CONTACT (FORMULAIRE + INFOS) -->
+    <div class="contact-grid">
+      
+      <!-- FORMULAIRE ÉPURÉ -->
+      <form class="contact-form" id="contactForm">
+        <div class="form-row">
+          <div class="input-group">
+            <label for="userName">Nom / Prénom *</label>
+            <input type="text" id="userName" placeholder="Ex: Jean Dupont" required />
+          </div>
+          <div class="input-group">
+            <label for="userEmail">Adresse Email *</label>
+            <input type="email" id="userEmail" placeholder="jean@domaine.com" required />
+          </div>
+        </div>
+
+        <div class="input-group">
+          <label for="userSubject">Sujet de votre message *</label>
+          <select id="userSubject" required>
+            <option value="" disabled selected>Sélectionnez un motif...</option>
+            <option value="Acquisition de tableau">Acquisition d'un Tableau / Toile</option>
+            <option value="Commande Streetwear">Commande T-Shirt / Pull</option>
+            <option value="Exposition / Presse">Demande d'Exposition ou Presse</option>
+            <option value="Autre question">Autre question générale</option>
+          </select>
+        </div>
+
+        <div class="input-group">
+          <label for="userMessage">Votre Message *</label>
+          <textarea id="userMessage" rows="5" placeholder="Parlez-nous de votre projet ou de l'œuvre convoitée..." required></textarea>
+        </div>
+
+        <button type="submit" class="btn-submit-contact">
+          <span>Envoyer le Message</span>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </button>
+      </form>
+
+      <!-- INFORMATIONS DE LA GALERIE -->
+      <div class="contact-info-card">
+        <div class="info-block">
+          <h3>L'Atelier & Showroom</h3>
+          <p>Abidjan, Côte d'Ivoire<br>Visites sur rendez-vous exclusif uniquement.</p>
+        </div>
+
+        <div class="info-block">
+          <h3>Contact Direct</h3>
+          <p>Email : contact@arttrixxgallery.com<br>WhatsApp : +225 07 00 00 00 00</p>
+        </div>
+
+        <div class="info-block">
+          <h3>Horaires de Correspondance</h3>
+          <p>Lundi au Samedi : 10h00 — 19h00<br>Dimanche : Fermé (Jour d'atelier)</p>
+        </div>
+
+        <div class="social-links">
+          <a href="#" target="_blank">Instagram</a>
+          <a href="#" target="_blank">Behance</a>
+          <a href="#" target="_blank">Twitter / X</a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- ==========================================
+     FOOTER MINIMALISTE DE LA GALERIE
+     ========================================== -->
+<footer class="main-footer-art">
+  <div class="footer-container">
+    
+    <div class="footer-top">
+      <div class="footer-brand-col">
+        <h2 class="footer-logo">Arttrixx Gallery</h2>
+        <p class="footer-brand-desc">L'alliance intemporelle de l'art contemporain et du vestiaire urbain.</p>
+      </div>
+
+      <div class="footer-nav-cols">
+        <div class="footer-col">
+          <h4>Navigation</h4>
+          <a href="#popular">Populaires</a>
+          <a href="#about">L'Artiste</a>
+          <a href="#contact">Contact</a>
+        </div>
+        <div class="footer-col">
+          <h4>Légal & Sécurité</h4>
+          <a href="#">Conditions Générales</a>
+          <a href="#">Politique de Confidentialité</a>
+          <a href="#">Certificats d'Authenticité</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <p class="copyright">&copy; 2026 Arttrixx Gallery. Tous droits réservés.</p>
+      <p class="signature-dev">Designed with white cube aesthetic.</p>
+    </div>
+
+  </div>
+</footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
