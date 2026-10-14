@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Administration — Arttrixx Gallery</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Space+Mono&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="admin.css">
+</head>
+<body class="admin-page">
+  <header class="admin-topbar">
+    <a href="index.html" class="admin-brand">Arttrixx <span>ADMIN</span></a>
+    <a href="index.html" class="admin-back-link">← Retour à la boutique</a>
+  </header>
+
+  <main class="admin-main">
+    <section class="admin-login-panel" id="adminLoginPanel">
+      <span class="admin-eyebrow">Espace sécurisé</span>
+      <h1>Connexion administrateur</h1>
+      <p>Saisissez le code d’accès administrateur.</p>
+      <div class="admin-notice" id="firebaseSetupNotice" hidden></div>
+      <form id="adminLoginForm" class="admin-form">
+        <label>Code d’accès<input type="password" name="password" autocomplete="current-password" placeholder="Entrer le code administrateur" required></label>
+        <button class="admin-primary-button" type="submit">Accéder au tableau de bord</button>
+        <p class="admin-form-message" id="loginMessage" role="alert"></p>
+      </form>
+    </section>
+
+    <section class="admin-dashboard" id="adminDashboard" hidden>
+      <div class="admin-dashboard-heading">
+        <div><span class="admin-eyebrow">Gestion de la galerie</span><h1>Tableau de bord</h1><p id="adminWelcome"></p></div>
+        <button class="admin-secondary-button" id="logoutButton" type="button">Déconnexion</button>
+      </div>
+
+      <div class="admin-stats" aria-label="Résumé du magasin">
+        <article><span>Produits</span><strong id="productCount">0</strong></article>
+        <article><span>Disponibles</span><strong id="availableCount">0</strong></article>
+        <article><span>Commandes en attente</span><strong id="pendingOrderCount">0</strong></article>
+        <article><span>Commandes totales</span><strong id="orderCount">0</strong></article>
+      </div>
+
+      <section class="admin-section" aria-labelledby="addProductTitle">
+        <div class="admin-section-heading"><div><span class="admin-eyebrow">Catalogue</span><h2 id="addProductTitle">Ajouter un produit</h2></div></div>
+        <form id="productForm" class="admin-product-form">
+          <label>Catégorie<select name="category" id="productCategory" required><option value="tableaux">Tableaux & toiles</option><option value="streetwear">T-shirts & pulls</option></select></label>
+          <label>Nom du produit<input name="name" type="text" maxlength="100" required></label>
+          <label>Prix (FCFA)<input name="price" type="number" min="1" step="1" required></label>
+          <label class="admin-full-width">Description<input name="description" type="text" maxlength="180" required></label>
+          <label class="admin-full-width">Photo du produit<input name="image" type="file" accept="image/*" required><small>Image envoyée dans Firebase Storage.</small></label>
+          <label id="sizesField">Tailles disponibles<input name="sizes" type="text" value="S, M, L, XL, XXL"><small>Séparez les tailles par des virgules.</small></label>
+          <label class="admin-checkbox-label"><input name="available" type="checkbox" checked> Disponible à la vente</label>
+          <button class="admin-primary-button admin-full-width" type="submit">Ajouter au catalogue</button>
+          <p class="admin-form-message admin-full-width" id="productMessage" role="status"></p>
+        </form>
+      </section>
+
+      <section class="admin-section" aria-labelledby="catalogTitle">
+        <div class="admin-section-heading"><div><span class="admin-eyebrow">Inventaire</span><h2 id="catalogTitle">Produits du catalogue</h2></div><label class="admin-filter-label">Afficher<select id="categoryFilter"><option value="all">Toutes les catégories</option><option value="tableaux">Tableaux & toiles</option><option value="streetwear">T-shirts & pulls</option></select></label></div>
+        <div class="admin-table-wrap"><table class="admin-table"><thead><tr><th>Produit</th><th>Catégorie</th><th>Prix</th><th>Disponibilité</th><th>Action</th></tr></thead><tbody id="productsTableBody"><tr><td colspan="5">Chargement du catalogue…</td></tr></tbody></table></div>
+      </section>
+
+      <section class="admin-section" aria-labelledby="ordersTitle">
+        <div class="admin-section-heading"><div><span class="admin-eyebrow">Ventes</span><h2 id="ordersTitle">Commandes clients</h2></div><span class="admin-live-label"><i></i> Synchronisation en direct</span></div>
+        <div class="admin-orders-list" id="ordersList"><p>Chargement des commandes…</p></div>
+      </section>
+      <p class="admin-global-message" id="dashboardMessage" role="status"></p>
+    </section>
+  </main>
+  <script type="module" src="admin-panel.js"></script>
+</body>
+</html>

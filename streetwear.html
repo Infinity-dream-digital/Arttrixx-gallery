@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Explorez les T-shirts et pulls Arttrixx : streetwear artistique en éditions limitées, imprimé et confectionné avec soin.">
+  <title>T-Shirts & Pulls — Arttrixx Gallery</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Rubik+Wet+Paint&family=Space+Mono&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="category-page.css">
+</head>
+<body class="category-page" data-catalog-category="streetwear">
+  <svg class="svg-filter-definitions" aria-hidden="true" focusable="false">
+    <filter id="pink-gorilla-fur" color-interpolation-filters="sRGB">
+      <feColorMatrix type="matrix" values="0 0 0 0 1 0.2498 0.4903 0.0953 0 0.1647 0.1430 0.2809 0.0545 0 0.5216 0 0 0 1 0" />
+    </filter>
+  </svg>
+
+  <header class="main-header">
+    <div class="header-container">
+      <a href="index.html" class="nav-logo" aria-label="Arttrixx Gallery, accueil">
+        <img src="./WhatsApp_Image_2026-10-13_at_09.03.35-removebg-preview.png" alt="" class="nav-logo-image">
+        <span>Arttrixx Gallery</span>
+      </a>
+      <nav class="desktop-nav" aria-label="Navigation principale">
+        <a href="index.html#popular">Accueil</a>
+        <a href="tableaux.html">Tableaux</a>
+        <a href="streetwear.html" aria-current="page">T-Shirts & Pulls</a>
+        <a href="index.html#about">L'Artiste</a>
+      </nav>
+      <div class="nav-actions">
+        <button class="cart-btn" aria-label="Panier">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>
+          <span class="cart-count" aria-live="polite">0</span>
+        </button>
+        <button class="burger-btn" id="burgerBtn" aria-label="Ouvrir le menu"><span class="burger-line"></span><span class="burger-line"></span></button>
+      </div>
+    </div>
+  </header>
+
+  <div class="mobile-drawer-overlay" id="drawerOverlay"></div>
+  <aside class="mobile-drawer" id="mobileDrawer" aria-label="Menu mobile">
+    <div class="drawer-header"><span class="drawer-tag">Navigation</span><button class="close-drawer-btn" id="closeDrawerBtn" aria-label="Fermer le menu">&times;</button></div>
+    <nav class="mobile-nav-links">
+      <a href="index.html#popular" class="drawer-link"><span>01</span> Accueil</a>
+      <a href="tableaux.html" class="drawer-link"><span>02</span> Tableaux & Toiles</a>
+      <a href="streetwear.html" class="drawer-link"><span>03</span> T-Shirts & Pulls</a>
+      <a href="index.html#about" class="drawer-link"><span>04</span> L'Artiste</a>
+      <a href="index.html#contact" class="drawer-link"><span>05</span> Contact</a>
+    </nav>
+    <div class="drawer-footer"><p class="drawer-brand">Arttrixx Gallery</p><span class="drawer-sub">Éditions limitées & pièces uniques</span></div>
+  </aside>
+
+  <main class="category-page-main">
+    <a class="category-back-link" href="index.html">← Retour à l'accueil</a>
+    <section class="category-hero category-hero--streetwear" tabindex="0" aria-labelledby="categoryTitle">
+      <img class="category-hero-image" src="https://images.unsplash.com/photo-1523398002811-999ca8dec234?auto=format&fit=crop&q=85&w=2000" alt="Vêtements streetwear exposés dans une boutique">
+      <div class="category-hero-shade"></div>
+      <div class="category-hero-content">
+        <span class="category-eyebrow">Streetwear artistique · Éditions limitées</span>
+        <h1 id="categoryTitle">T-Shirts & Pulls</h1>
+        <p>L’art quitte la toile pour accompagner vos mouvements.</p>
+      </div>
+    </section>
+
+    <section class="category-products" aria-labelledby="productsTitle">
+      <header class="category-section-heading">
+        <span class="section-tag">La collection textile</span>
+        <h2 id="productsTitle">Pièces à porter</h2>
+        <p>Des matières choisies et des créations pensées pour la rue.</p>
+      </header>
+      <div class="art-grid category-art-grid">
+        <article class="art-canvas-card">
+          <div class="canvas-frame"><img src="https://i.pinimg.com/736x/0c/e8/da/0ce8da66db411501fbb5ce97796eef50.jpg" alt="Hoodie oversize Arttrixx Signature" loading="lazy"><span class="canvas-badge">Édition limitée</span></div>
+          <div class="canvas-cartel"><div class="cartel-info"><h3 class="art-name">Hoodie « Arttrixx Signature »</h3><p class="art-medium">Coton 480 GSM · Broderie artisanale</p></div><span class="art-price">85.000 FCFA</span></div>
+          <label class="product-size-label">Taille<select class="product-size-select" aria-label="Choisir la taille du hoodie Arttrixx Signature" required><option value="" selected disabled>Choisir</option><option value="S">S</option><option value="M">M</option><option value="L">L</option><option value="XL">XL</option><option value="XXL">XXL</option></select></label>
+          <button class="add-to-cart-btn" type="button" data-product-name="Hoodie Arttrixx Signature">Ajouter au panier <span aria-hidden="true">+</span></button>
+        </article>
+        <article class="art-canvas-card">
+          <div class="canvas-frame"><img src="https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?auto=format&fit=crop&q=85&w=900" alt="T-shirt blanc en coton, coupe urbaine" loading="lazy"><span class="canvas-badge">Best-seller</span></div>
+          <div class="canvas-cartel"><div class="cartel-info"><h3 class="art-name">T-shirt « Spray Signature »</h3><p class="art-medium">Coton bio · Coupe oversize</p></div><span class="art-price">35.000 FCFA</span></div>
+          <label class="product-size-label">Taille<select class="product-size-select" aria-label="Choisir la taille du T-shirt Spray Signature" required><option value="" selected disabled>Choisir</option><option value="S">S</option><option value="M">M</option><option value="L">L</option><option value="XL">XL</option><option value="XXL">XXL</option></select></label>
+          <button class="add-to-cart-btn" type="button" data-product-name="T-shirt Spray Signature">Ajouter au panier <span aria-hidden="true">+</span></button>
+        </article>
+        <article class="art-canvas-card">
+          <div class="canvas-frame"><img src="https://images.unsplash.com/photo-1556821840-3a63f95609a7?auto=format&fit=crop&q=85&w=900" alt="Sweat-shirt streetwear épais" loading="lazy"><span class="canvas-badge">Nouveauté</span></div>
+          <div class="canvas-cartel"><div class="cartel-info"><h3 class="art-name">Sweat « Urban Canvas »</h3><p class="art-medium">Molleton premium · Sérigraphie</p></div><span class="art-price">65.000 FCFA</span></div>
+          <label class="product-size-label">Taille<select class="product-size-select" aria-label="Choisir la taille du sweat Urban Canvas" required><option value="" selected disabled>Choisir</option><option value="S">S</option><option value="M">M</option><option value="L">L</option><option value="XL">XL</option><option value="XXL">XXL</option></select></label>
+          <button class="add-to-cart-btn" type="button" data-product-name="Sweat Urban Canvas">Ajouter au panier <span aria-hidden="true">+</span></button>
+        </article>
+        <article class="art-canvas-card">
+          <div class="canvas-frame"><img src="https://images.unsplash.com/photo-1578681994506-b8f463449011?auto=format&fit=crop&q=85&w=900" alt="Pull à capuche de la collection streetwear" loading="lazy"><span class="canvas-badge">Série limitée</span></div>
+          <div class="canvas-cartel"><div class="cartel-info"><h3 class="art-name">Hoodie « Gorilla Art »</h3><p class="art-medium">Coton épais · Impression premium</p></div><span class="art-price">75.000 FCFA</span></div>
+          <label class="product-size-label">Taille<select class="product-size-select" aria-label="Choisir la taille du hoodie Gorilla Art" required><option value="" selected disabled>Choisir</option><option value="S">S</option><option value="M">M</option><option value="L">L</option><option value="XL">XL</option><option value="XXL">XXL</option></select></label>
+          <button class="add-to-cart-btn" type="button" data-product-name="Hoodie Gorilla Art">Ajouter au panier <span aria-hidden="true">+</span></button>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <div class="cart-toast" id="cartToast" role="status" aria-live="polite"></div>
+  <footer class="main-footer-art"><div class="footer-container"><div class="footer-top"><div class="footer-brand-col"><h2 class="footer-logo">Arttrixx Gallery</h2><p class="footer-brand-desc">L'alliance de l'art contemporain et du vestiaire urbain.</p></div><nav class="footer-nav-cols" aria-label="Navigation de pied de page"><div class="footer-col"><h4>Explorer</h4><a href="index.html#popular">Accueil</a><a href="tableaux.html">Tableaux & Toiles</a><a href="index.html#contact">Contact</a></div></nav></div><div class="footer-bottom"><p class="copyright">&copy; 2026 Arttrixx Gallery. Tous droits réservés.</p><a class="category-home-link" href="index.html">Retour à l'accueil ↑</a></div></div></footer>
+  <script src="script.js"></script>
+  <script type="module" src="storefront-catalog.js"></script>
+</body>
+</html>

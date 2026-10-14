@@ -1,0 +1,18 @@
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+    function isAdmin() {
+      return request.auth != null
+        && request.auth.token.email == 'REMPLACER_PAR_LE_MAIL_ADMIN';
+    }
+
+    match /products/{userId}/{fileName} {
+      allow read: if true;
+      allow create, update: if isAdmin()
+        && request.auth.uid == userId
+        && request.resource.size < 8 * 1024 * 1024
+        && request.resource.contentType.matches('image/.*');
+      allow delete: if isAdmin() && request.auth.uid == userId;
+    }
+  }
+}

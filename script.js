@@ -30,6 +30,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const mobileDrawer = document.getElementById('mobileDrawer');
   const drawerOverlay = document.getElementById('drawerOverlay');
   const drawerLinks = document.querySelectorAll('.drawer-link');
+  const adminFooterEntry = document.querySelector('.admin-footer-entry');
 
   function openDrawer() {
     mobileDrawer.classList.add('active');
@@ -52,35 +53,299 @@ document.addEventListener('DOMContentLoaded', () => {
     link.addEventListener('click', closeDrawer);
   });
 
+  if (adminFooterEntry) {
+    let adminClickTimer;
+    let adminClickCount = 0;
+    adminFooterEntry.addEventListener('click', event => {
+      event.preventDefault();
+      window.clearTimeout(adminClickTimer);
+      adminClickCount += 1;
+      if (adminClickCount >= 2) {
+        adminClickCount = 0;
+        window.location.href = adminFooterEntry.href;
+        return;
+      }
+      adminClickTimer = window.setTimeout(() => {
+        adminClickCount = 0;
+      }, 350);
+    });
+  }
+
   /* ==========================================
-     3. AJOUT DES ARTICLES AU PANIER
+     3. PANIER PARTAGÉ ET COMMANDE
      ========================================== */
-  const cartCount = document.querySelector('.cart-count');
   const cartToast = document.getElementById('cartToast');
-  const addToCartButtons = document.querySelectorAll('.add-to-cart-btn');
-  let cartQuantity = 0;
+  const cartTrigger = document.querySelector('.cart-btn');
+  const deliveryFee = 1500;
+  const storageKey = 'arttrixx-gallery-cart';
+  let cart = [];
   let toastTimeout;
 
-  addToCartButtons.forEach(button => {
-    button.addEventListener('click', () => {
-      cartQuantity += 1;
-      if (cartCount) cartCount.textContent = String(cartQuantity);
+  try {
+    cart = JSON.parse(window.localStorage.getItem(storageKey) || '[]');
+    if (!Array.isArray(cart)) cart = [];
+  } catch (error) {
+    cart = [];
+  }
 
-      if (cartToast) {
-        cartToast.textContent = `${button.dataset.productName} ajouté au panier.`;
-        cartToast.classList.add('visible');
-        window.clearTimeout(toastTimeout);
-        toastTimeout = window.setTimeout(() => {
-          cartToast.classList.remove('visible');
-        }, 2600);
+  document.body.insertAdjacentHTML('beforeend', `
+    <div class="cart-modal-overlay" id="cartModalOverlay" hidden>
+      <section class="cart-modal" role="dialog" aria-modal="true" aria-labelledby="cartModalTitle">
+        <button class="cart-modal-close" type="button" aria-label="Fermer le panier">&times;</button>
+        <div id="cartModalContent"></div>
+      </section>
+    </div>
+  `);
+
+  const cartOverlay = document.getElementById('cartModalOverlay');
+  const cartModalContent = document.getElementById('cartModalContent');
+  const closeCartButton = document.querySelector('.cart-modal-close');
+
+  function saveCart() {
+    try {
+      window.localStorage.setItem(storageKey, JSON.stringify(cart));
+    } catch (error) {
+      // Le panier reste utilisable pour la session même si le stockage est indisponible.
+    }
+    updateCartCount();
+  }
+
+  function updateCartCount() {
+    const quantity = cart.reduce((total, item) => total + item.quantity, 0);
+    document.querySelectorAll('.cart-count').forEach(count => {
+      count.textContent = String(quantity);
+    });
+  }
+
+  function formatPrice(price) {
+    return `${new Intl.NumberFormat('fr-FR').format(price)} FCFA`;
+  }
+
+  function escapeHtml(value) {
+    return String(value).replace(/[&<>"']/g, character => ({
+      '&': '&amp;',
+      '<': '&lt;',
+      '>': '&gt;',
+      '"': '&quot;',
+      "'": '&#39;'
+    })[character]);
+  }
+
+  function showCartToast(message) {
+    if (!cartToast) return;
+    cartToast.textContent = message;
+    cartToast.classList.add('visible');
+    window.clearTimeout(toastTimeout);
+    toastTimeout = window.setTimeout(() => cartToast.classList.remove('visible'), 2600);
+  }
+
+  function openCart() {
+    renderCart();
+    cartOverlay.hidden = false;
+    document.body.style.overflow = 'hidden';
+    closeCartButton.focus();
+  }
+
+  function closeCart() {
+    cartOverlay.hidden = true;
+    document.body.style.overflow = '';
+    if (cartTrigger) cartTrigger.focus();
+  }
+
+  function renderCart() {
+    const subtotal = cart.reduce((total, item) => total + item.price * item.quantity, 0);
+    const shipping = cart.length ? deliveryFee : 0;
+
+    if (!cart.length) {
+      cartModalContent.innerHTML = `
+        <span class="cart-modal-eyebrow">Arttrixx Gallery</span>
+        <h2 id="cartModalTitle">Votre panier</h2>
+        <p class="cart-empty-message">Votre panier est encore vide. Découvrez les œuvres et pièces de la collection.</p>
+        <button class="cart-continue-button" type="button" data-cart-close>Continuer mes achats</button>
+      `;
+      return;
+    }
+
+    const itemsMarkup = cart.map((item, index) => `
+      <article class="cart-line-item">
+        <img src="${escapeHtml(item.image)}" alt="" class="cart-line-image">
+        <div class="cart-line-details">
+          <h3>${escapeHtml(item.name)}</h3>
+          ${item.size ? `<p class="cart-line-size">Taille : ${escapeHtml(item.size)}</p>` : ''}
+          <p class="cart-line-price">${formatPrice(item.price)}</p>
+          <div class="cart-line-controls">
+            <button type="button" data-cart-action="decrease" data-cart-index="${index}" aria-label="Diminuer la quantité">−</button>
+            <span>${item.quantity}</span>
+            <button type="button" data-cart-action="increase" data-cart-index="${index}" aria-label="Augmenter la quantité">+</button>
+            <button type="button" class="cart-line-remove" data-cart-action="remove" data-cart-index="${index}">Supprimer</button>
+          </div>
+        </div>
+        <strong class="cart-line-total">${formatPrice(item.price * item.quantity)}</strong>
+      </article>
+    `).join('');
+
+    cartModalContent.innerHTML = `
+      <span class="cart-modal-eyebrow">Arttrixx Gallery</span>
+      <h2 id="cartModalTitle">Votre panier <span>(${cart.reduce((total, item) => total + item.quantity, 0)})</span></h2>
+      <div class="cart-line-list">${itemsMarkup}</div>
+      <div class="cart-totals">
+        <p><span>Sous-total</span><strong>${formatPrice(subtotal)}</strong></p>
+        <p><span>Livraison</span><strong>${formatPrice(shipping)}</strong></p>
+        <p class="cart-grand-total"><span>Total à payer</span><strong>${formatPrice(subtotal + shipping)}</strong></p>
+      </div>
+      <button class="cart-checkout-button" type="button" data-cart-checkout>Commander</button>
+      <button class="cart-continue-button" type="button" data-cart-close>Continuer mes achats</button>
+    `;
+  }
+
+  function renderCheckout() {
+    const subtotal = cart.reduce((total, item) => total + item.price * item.quantity, 0);
+    cartModalContent.innerHTML = `
+      <button class="cart-back-button" type="button" data-cart-back>← Retour au panier</button>
+      <span class="cart-modal-eyebrow">Finaliser la commande</span>
+      <h2 id="cartModalTitle">Informations de livraison</h2>
+      <p class="checkout-total-preview">Total avec livraison : <strong>${formatPrice(subtotal + deliveryFee)}</strong></p>
+      <form class="checkout-form" id="checkoutForm">
+        <label>Nom complet<input name="customerName" type="text" autocomplete="name" required></label>
+        <label>Numéro de téléphone<input name="phone" type="tel" autocomplete="tel" placeholder="Ex. +225 07 00 00 00 00" required></label>
+        <label>Lieu de livraison<input name="location" type="text" autocomplete="street-address" placeholder="Commune, quartier, adresse ou repère" required></label>
+        <label>Date et heure de livraison<input name="deliveryTime" type="datetime-local" required></label>
+        <button class="cart-checkout-button" type="submit">Confirmer la commande</button>
+      </form>
+    `;
+  }
+
+  if (cartTrigger) cartTrigger.addEventListener('click', openCart);
+  closeCartButton.addEventListener('click', closeCart);
+  cartOverlay.addEventListener('click', event => {
+    if (event.target === cartOverlay || event.target.closest('[data-cart-close]')) closeCart();
+  });
+  document.addEventListener('keydown', event => {
+    if (event.key === 'Escape' && !cartOverlay.hidden) closeCart();
+  });
+
+  cartModalContent.addEventListener('click', event => {
+    const actionButton = event.target.closest('[data-cart-action]');
+    if (actionButton) {
+      const index = Number(actionButton.dataset.cartIndex);
+      if (!cart[index]) return;
+      if (actionButton.dataset.cartAction === 'remove') cart.splice(index, 1);
+      if (actionButton.dataset.cartAction === 'increase') cart[index].quantity += 1;
+      if (actionButton.dataset.cartAction === 'decrease') {
+        cart[index].quantity -= 1;
+        if (cart[index].quantity <= 0) cart.splice(index, 1);
+      }
+      saveCart();
+      renderCart();
+      return;
+    }
+
+    if (event.target.closest('[data-cart-checkout]')) renderCheckout();
+    if (event.target.closest('[data-cart-back]')) renderCart();
+  });
+
+  cartModalContent.addEventListener('submit', async event => {
+    if (event.target.id !== 'checkoutForm') return;
+    event.preventDefault();
+    if (!event.target.reportValidity()) return;
+
+    const formData = new FormData(event.target);
+    const customerName = String(formData.get('customerName')).trim();
+    const submitButton = event.target.querySelector('[type="submit"]');
+    const order = {
+      customerName,
+      phone: String(formData.get('phone')).trim(),
+      location: String(formData.get('location')).trim(),
+      deliveryTime: String(formData.get('deliveryTime')),
+      items: cart.map(item => ({
+        productId: item.productId || '',
+        name: item.name,
+        size: item.size || '',
+        unitPrice: item.price,
+        quantity: item.quantity,
+        lineTotal: item.price * item.quantity
+      })),
+      subtotal: cart.reduce((total, item) => total + item.price * item.quantity, 0),
+      deliveryFee,
+      total: cart.reduce((total, item) => total + item.price * item.quantity, 0) + deliveryFee,
+      status: 'pending'
+    };
+
+    if (!window.arttrixxFirebase?.isConfigured) {
+      let warning = event.target.querySelector('.checkout-error');
+      if (!warning) {
+        warning = document.createElement('p');
+        warning.className = 'checkout-error';
+        warning.setAttribute('role', 'alert');
+        event.target.prepend(warning);
+      }
+      warning.textContent = 'Firebase n’est pas encore configuré : la commande ne peut pas être enregistrée.';
+      return;
+    }
+
+    submitButton.disabled = true;
+    submitButton.textContent = 'Enregistrement…';
+    let orderNumber;
+    try {
+      orderNumber = await window.arttrixxFirebase.createOrder(order);
+    } catch (error) {
+      let warning = event.target.querySelector('.checkout-error');
+      if (!warning) {
+        warning = document.createElement('p');
+        warning.className = 'checkout-error';
+        warning.setAttribute('role', 'alert');
+        event.target.prepend(warning);
+      }
+      warning.textContent = 'La commande n’a pas pu être enregistrée. Vérifiez votre connexion et réessayez.';
+      submitButton.disabled = false;
+      submitButton.textContent = 'Confirmer la commande';
+      return;
+    }
+
+    cart = [];
+    saveCart();
+    cartModalContent.innerHTML = `
+      <div class="order-success-mark" aria-hidden="true">✓</div>
+      <span class="cart-modal-eyebrow">Commande enregistrée</span>
+      <h2 id="cartModalTitle">Merci ${escapeHtml(customerName)} !</h2>
+      <p class="cart-empty-message">Votre commande <strong>${orderNumber}</strong> a été enregistrée. Nous vous contacterons au numéro indiqué pour confirmer la livraison.</p>
+      <button class="cart-checkout-button" type="button" data-cart-close>Terminer</button>
+    `;
+  });
+
+  document.addEventListener('click', event => {
+    const button = event.target.closest('.add-to-cart-btn');
+    if (!button) return;
+      const card = button.closest('.art-canvas-card');
+      if (!card || button.disabled) return;
+      const sizeSelect = card.querySelector('.product-size-select');
+      const size = sizeSelect ? sizeSelect.value : '';
+      if (sizeSelect && !size) {
+        sizeSelect.setCustomValidity('Choisissez une taille avant l’ajout au panier.');
+        sizeSelect.reportValidity();
+        sizeSelect.addEventListener('change', () => sizeSelect.setCustomValidity(''), { once: true });
+        return;
       }
 
+      const name = button.dataset.productName || card.querySelector('.art-name')?.textContent.trim() || 'Article Arttrixx';
+      const priceText = card.querySelector('.art-price')?.textContent || '0';
+      const price = Number(priceText.replace(/[^\d]/g, ''));
+      const image = card.querySelector('.canvas-frame img')?.getAttribute('src') || '';
+      const existingItem = cart.find(item => item.name === name && item.size === size);
+      const productId = button.dataset.productId || '';
+
+      if (existingItem) existingItem.quantity += 1;
+      else cart.push({ name, size, price, image, productId, quantity: 1 });
+
+      saveCart();
+      showCartToast(`${name}${size ? ` · taille ${size}` : ''} ajouté au panier.`);
       button.innerHTML = 'Ajouté au panier <span aria-hidden="true">✓</span>';
       window.setTimeout(() => {
         button.innerHTML = 'Ajouter au panier <span aria-hidden="true">+</span>';
       }, 1400);
-    });
   });
+
+  updateCartCount();
 
 });
 

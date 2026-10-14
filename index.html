@@ -8,11 +8,20 @@
   <!-- TYPOGRAPHIES GOOGLE (Syne, Plus Jakarta Sans, Space Mono) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Space+Mono&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Rubik+Wet+Paint&family=Space+Mono&family=Syne:wght@700;800&display=swap" rel="stylesheet">
   
   <link rel="stylesheet" href="style.css">
 </head>
-<body>
+<body data-catalog-category="home">
+  <svg class="svg-filter-definitions" aria-hidden="true" focusable="false">
+    <filter id="pink-gorilla-fur" color-interpolation-filters="sRGB">
+      <feColorMatrix type="matrix" values="
+        0 0 0 0 1
+        0.2498 0.4903 0.0953 0 0.1647
+        0.1430 0.2809 0.0545 0 0.5216
+        0 0 0 1 0" />
+    </filter>
+  </svg>
 
   <!-- ==========================================
        1. PRELOADER / PAGE DE CHARGEMENT FACTICE
@@ -45,14 +54,16 @@
       
       <!-- LOGO TEXTE -->
       <a href="#" class="nav-logo">
-        Arttrixx Gallery
+        <!-- Modifiez src pour choisir un autre fichier de logo. -->
+        <img src="./WhatsApp_Image_2026-10-13_at_09.03.35-removebg-preview.png" alt="" class="nav-logo-image">
+        <span>Arttrixx Gallery</span>
       </a>
 
       <!-- NAVIGATION DESKTOP -->
       <nav class="desktop-nav">
-        <a href="#collections">Collections</a>
-        <a href="#tableaux">Tableaux</a>
-        <a href="#streetwear">T-Shirts & Pulls</a>
+        <a href="#popular">Collections</a>
+        <a href="tableaux.html">Tableaux</a>
+        <a href="streetwear.html">T-Shirts & Pulls</a>
         <a href="#about">L'Artiste</a>
       </nav>
 
@@ -90,9 +101,9 @@
     </div>
 
     <nav class="mobile-nav-links">
-      <a href="#collections" class="drawer-link"><span>01</span> Collections</a>
-      <a href="#tableaux" class="drawer-link"><span>02</span> Tableaux & Toiles</a>
-      <a href="#streetwear" class="drawer-link"><span>03</span> T-Shirts & Pulls</a>
+      <a href="#popular" class="drawer-link"><span>01</span> Collections</a>
+      <a href="tableaux.html" class="drawer-link"><span>02</span> Tableaux & Toiles</a>
+      <a href="streetwear.html" class="drawer-link"><span>03</span> T-Shirts & Pulls</a>
       <a href="#about" class="drawer-link"><span>04</span> L'Artiste</a>
       <a href="#contact" class="drawer-link"><span>05</span> Contact / Exposition</a>
     </nav>
@@ -128,8 +139,8 @@
       <h2 class="hero-title">Là où l'Art Rencontre la Rue</h2>
       <p class="hero-description">Toiles originales, pièces textiles exclusives et art contemporain brut.</p>
       <div class="hero-cta-group">
-        <a href="#popular" class="btn-primary">Découvrir les œuvres</a>
-        <a href="#popular" class="btn-secondary">Voir la sélection</a>
+        <a href="tableaux.html" class="btn-primary">Découvrir les tableaux</a>
+        <a href="streetwear.html" class="btn-secondary">Voir le streetwear</a>
       </div>
     </div>
 
@@ -177,6 +188,12 @@
         </div>
         <span class="art-price">85.000 FCFA</span>
       </div>
+      <label class="product-size-label">Taille
+        <select class="product-size-select" aria-label="Choisir la taille du hoodie" required>
+          <option value="" selected disabled>Choisir</option>
+          <option value="S">S</option><option value="M">M</option><option value="L">L</option><option value="XL">XL</option><option value="XXL">XXL</option>
+        </select>
+      </label>
       <button class="add-to-cart-btn" type="button" data-product-name="Hoodie Oversize Arttrixx Signature">
         Ajouter au panier <span aria-hidden="true">+</span>
       </button>
@@ -340,7 +357,7 @@
     
     <div class="footer-top">
       <div class="footer-brand-col">
-        <h2 class="footer-logo">Arttrixx Gallery</h2>
+        <h2 class="footer-logo"><a class="admin-footer-entry" href="admin.html">Arttrixx Gallery</a></h2>
         <p class="footer-brand-desc">L'alliance intemporelle de l'art contemporain et du vestiaire urbain.</p>
       </div>
 
@@ -369,5 +386,6 @@
 </footer>
 
   <script src="script.js"></script>
+  <script type="module" src="storefront-catalog.js"></script>
 </body>
 </html>
