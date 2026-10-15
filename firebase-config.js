@@ -5,13 +5,12 @@ import { getFirestore } from 'https://www.gstatic.com/firebasejs/10.14.1/firebas
 import { getStorage } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-storage.js';
 
 export const firebaseConfig = {
-  apiKey: "AIzaSyBxFQ6Qgwv07LVpFjOFCzv4YeG3HrhAVwQ",
-  authDomain: "puff-e16f7.firebaseapp.com",
-  databaseURL: "https://puff-e16f7-default-rtdb.europe-west1.firebasedatabase.app",
-  projectId: "puff-e16f7",
-  storageBucket: "puff-e16f7.firebasestorage.app",
-  messagingSenderId: "552508218564",
-  appId: "1:552508218564:web:cc98c3e81bb575a41afd91"
+   apiKey: "AIzaSyDX8dIcLyABeJ-SE3a7uLEo4aaTC2lbI40",
+  authDomain: "chikenhouseabidjan.firebaseapp.com",
+  projectId: "chikenhouseabidjan",
+  storageBucket: "chikenhouseabidjan.firebasestorage.app",
+  messagingSenderId: "472248026360",
+  appId: "1:472248026360:web:c8c802e81a174c48c0a70d"
 };
 
 export const firebaseConfigured = !Object.values(firebaseConfig).some(value => value.startsWith('REMPLACER_'));
