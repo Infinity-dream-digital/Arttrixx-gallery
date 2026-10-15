@@ -1,14 +1,9 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    function isAdmin() {
-      return request.auth != null
-        && request.auth.token.email == 'REMPLACER_PAR_LE_MAIL_ADMIN';
-    }
-
     match /products/{productId} {
-      allow read: if resource.data.available == true || isAdmin();
-      allow create, update, delete: if isAdmin();
+      // TEMPORAIRE : règles ouvertes pour le tableau de bord protégé uniquement par le code JavaScript.
+      allow read, write: if true;
     }
 
     match /orders/{orderId} {
@@ -21,7 +16,8 @@ service cloud.firestore {
         && request.resource.data.deliveryFee == 1500
         && request.resource.data.items is list
         && request.resource.data.items.size() > 0;
-      allow read, update, delete: if isAdmin();
+      // TEMPORAIRE : les commandes et leurs coordonnées sont lisibles/modifiables publiquement.
+      allow read, update, delete: if true;
     }
   }
 }

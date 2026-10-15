@@ -19,7 +19,7 @@
 
   <main class="admin-main">
     <section class="admin-login-panel" id="adminLoginPanel">
-      <span class="admin-eyebrow">Espace sécurisé</span>
+      <span class="admin-eyebrow">Accès administrateur</span>
       <h1>Connexion administrateur</h1>
       <p>Saisissez le code d’accès administrateur.</p>
       <div class="admin-notice" id="firebaseSetupNotice" hidden></div>
@@ -50,7 +50,7 @@
           <label>Nom du produit<input name="name" type="text" maxlength="100" required></label>
           <label>Prix (FCFA)<input name="price" type="number" min="1" step="1" required></label>
           <label class="admin-full-width">Description<input name="description" type="text" maxlength="180" required></label>
-          <label class="admin-full-width">Photo du produit<input name="image" type="file" accept="image/*" required><small>Image envoyée dans Firebase Storage.</small></label>
+          <label class="admin-full-width">Photo du produit<input name="image" type="file" accept="image/*" required><small>L’image est envoyée dans Firebase Storage.</small></label>
           <label id="sizesField">Tailles disponibles<input name="sizes" type="text" value="S, M, L, XL, XXL"><small>Séparez les tailles par des virgules.</small></label>
           <label class="admin-checkbox-label"><input name="available" type="checkbox" checked> Disponible à la vente</label>
           <button class="admin-primary-button admin-full-width" type="submit">Ajouter au catalogue</button>
@@ -70,6 +70,7 @@
       <p class="admin-global-message" id="dashboardMessage" role="status"></p>
     </section>
   </main>
+  <script src="admin-login.js"></script>
   <script type="module" src="admin-panel.js"></script>
 </body>
 </html>

@@ -1,12 +1,9 @@
-import { onAuthStateChanged, signInWithEmailAndPassword, signOut } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js';
-import { addDoc, collection, deleteDoc, doc, getDocs, onSnapshot, orderBy, query, serverTimestamp, updateDoc } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
+import { addDoc, collection, deleteDoc, doc, onSnapshot, orderBy, query, serverTimestamp, updateDoc } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
 import { deleteObject, getDownloadURL, ref, uploadBytes } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-storage.js';
-import { adminEmail, auth, db, firebaseConfigured, storage } from './firebase-config.js';
+import { db, firebaseConfigured, storage } from './firebase-config.js';
 
 const loginPanel = document.getElementById('adminLoginPanel');
 const dashboard = document.getElementById('adminDashboard');
-const loginForm = document.getElementById('adminLoginForm');
-const loginMessage = document.getElementById('loginMessage');
 const setupNotice = document.getElementById('firebaseSetupNotice');
 const productForm = document.getElementById('productForm');
 const productMessage = document.getElementById('productMessage');
@@ -21,7 +18,6 @@ let products = [];
 let orders = [];
 let stopProductsListener;
 let stopOrdersListener;
-let initialCatalogSeeded = false;
 
 const currency = value => `${new Intl.NumberFormat('fr-FR').format(Number(value) || 0)} FCFA`;
 const categoryName = category => category === 'streetwear' ? 'T-shirts & pulls' : 'Tableaux & toiles';
@@ -178,24 +174,19 @@ function renderOrders() {
   });
 }
 
-function startDashboard(user) {
+function startDashboard() {
   loginPanel.hidden = true;
   dashboard.hidden = false;
-  document.getElementById('adminWelcome').textContent = `Connecté en tant que ${user.email}`;
+  document.getElementById('adminWelcome').textContent = 'Articles et commandes enregistrés dans Firebase.';
   clearError(dashboardMessage);
 
   stopProductsListener?.();
   stopOrdersListener?.();
-  if (!initialCatalogSeeded) {
-    initialCatalogSeeded = true;
-    seedInitialCatalog().catch(error => showError(dashboardMessage, `Initialisation du catalogue impossible : ${error.message}`));
-  }
   stopProductsListener = onSnapshot(query(collection(db, 'products'), orderBy('createdAt', 'desc')), snapshot => {
     products = snapshot.docs.map(item => ({ id: item.id, ...item.data() }));
     renderProducts();
     updateStats();
-  }, error => showError(dashboardMessage, `Lecture des produits impossible : ${error.message}`));
-
+  }, error => showError(dashboardMessage, `Lecture des articles impossible : ${error.message}`));
   stopOrdersListener = onSnapshot(query(collection(db, 'orders'), orderBy('createdAt', 'desc')), snapshot => {
     orders = snapshot.docs.map(item => ({ id: item.id, ...item.data() }));
     renderOrders();
@@ -203,56 +194,21 @@ function startDashboard(user) {
   }, error => showError(dashboardMessage, `Lecture des commandes impossible : ${error.message}`));
 }
 
-async function seedInitialCatalog() {
-  const productsCollection = collection(db, 'products');
-  const snapshot = await getDocs(productsCollection);
-  if (!snapshot.empty) return;
-
-  const starterProducts = [
-    { category: 'tableaux', name: 'Écho Urbain', description: 'Huile & acrylique sur toile · 120 × 90 cm', price: 450000, image: 'https://i.pinimg.com/1200x/bc/8f/e9/bc8fe94478e088628f03a5ab38972895.jpg', badge: 'Pièce unique' },
-    { category: 'streetwear', name: 'Hoodie Oversize Arttrixx Signature', description: 'Coton 480 GSM · Broderie artisanale', price: 85000, image: 'https://i.pinimg.com/736x/0c/e8/da/0ce8da66db411501fbb5ce97796eef50.jpg', badge: 'Édition limitée', sizes: ['S', 'M', 'L', 'XL', 'XXL'] },
-    { category: 'tableaux', name: 'Mémoire de Formes', description: 'Technique mixte sur lin · 100 × 100 cm', price: 380000, image: 'https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?auto=format&fit=crop&q=85&w=900', badge: 'Signé par l’artiste' },
-    { category: 'tableaux', name: 'Rythme en Rouge', description: 'Acrylique sur toile · 80 × 100 cm', price: 320000, image: 'https://images.unsplash.com/photo-1541961017774-22349e4a1262?auto=format&fit=crop&q=85&w=900', badge: 'Série limitée' },
-    { category: 'tableaux', name: 'Silence Doré', description: 'Acrylique & feuille d’or · 90 × 90 cm', price: 410000, image: 'https://images.unsplash.com/photo-1577083552431-6e5fd01aa342?auto=format&fit=crop&q=85&w=900', badge: 'Nouvelle œuvre' },
-    { category: 'streetwear', name: 'T-shirt Spray Signature', description: 'Coton bio · Coupe oversize', price: 35000, image: 'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?auto=format&fit=crop&q=85&w=900', badge: 'Best-seller', sizes: ['S', 'M', 'L', 'XL', 'XXL'] },
-    { category: 'streetwear', name: 'Sweat Urban Canvas', description: 'Molleton premium · Sérigraphie', price: 65000, image: 'https://images.unsplash.com/photo-1556821840-3a63f95609a7?auto=format&fit=crop&q=85&w=900', badge: 'Nouveauté', sizes: ['S', 'M', 'L', 'XL', 'XXL'] },
-    { category: 'streetwear', name: 'Hoodie Gorilla Art', description: 'Coton épais · Impression premium', price: 75000, image: 'https://images.unsplash.com/photo-1578681994506-b8f463449011?auto=format&fit=crop&q=85&w=900', badge: 'Série limitée', sizes: ['S', 'M', 'L', 'XL', 'XXL'] }
-  ];
-
-  await Promise.all(starterProducts.map(product => addDoc(productsCollection, {
-    ...product,
-    available: true,
-    createdAt: serverTimestamp(),
-    updatedAt: serverTimestamp()
-  })));
+function logout() {
+  stopProductsListener?.();
+  stopOrdersListener?.();
+  dashboard.hidden = true;
+  loginPanel.hidden = false;
 }
 
 if (!firebaseConfigured) {
   setupNotice.hidden = false;
-  setupNotice.textContent = 'Firebase n’est pas configuré. Renseignez firebase-config.js, activez Authentication (e-mail/mot de passe), Firestore et Storage, puis publiez les règles fournies.';
-  loginForm.querySelector('button[type="submit"]').disabled = true;
+  setupNotice.textContent = 'La configuration Firebase est incomplète. Vérifiez firebase-config.js.';
 }
 
-loginForm.addEventListener('submit', async event => {
-  event.preventDefault();
-  clearError(loginMessage);
-  if (!firebaseConfigured || !auth) return;
-  const formData = new FormData(loginForm);
-  const email = adminEmail.trim().toLowerCase();
-  const password = String(formData.get('password'));
+document.addEventListener('admin:authorized', startDashboard);
 
-  const submit = loginForm.querySelector('button[type="submit"]');
-  submit.disabled = true;
-  try {
-    await signInWithEmailAndPassword(auth, email, password);
-  } catch (error) {
-    showError(loginMessage, 'Code incorrect ou compte administrateur Firebase non configuré.');
-  } finally {
-    submit.disabled = false;
-  }
-});
-
-document.getElementById('logoutButton').addEventListener('click', () => signOut(auth));
+document.getElementById('logoutButton').addEventListener('click', logout);
 categoryFilter.addEventListener('change', renderProducts);
 categorySelect.addEventListener('change', () => {
   sizesField.hidden = categorySelect.value !== 'streetwear';
@@ -273,15 +229,15 @@ productForm.addEventListener('submit', async event => {
   submit.disabled = true;
   submit.textContent = 'Envoi du produit…';
   try {
-    const safeFileName = imageFile.name.replace(/[^a-zA-Z0-9._-]/g, '-');
-    const imagePath = `products/${auth.currentUser.uid}/${Date.now()}-${safeFileName}`;
-    const imageRef = ref(storage, imagePath);
-    await uploadBytes(imageRef, imageFile, { contentType: imageFile.type });
-    const imageUrl = await getDownloadURL(imageRef);
     const category = String(formData.get('category'));
     const sizes = category === 'streetwear'
       ? String(formData.get('sizes')).split(',').map(size => size.trim()).filter(Boolean)
       : [];
+    const safeFileName = imageFile.name.replace(/[^a-zA-Z0-9._-]/g, '-');
+    const imagePath = `products/${Date.now()}-${safeFileName}`;
+    const imageRef = ref(storage, imagePath);
+    await uploadBytes(imageRef, imageFile, { contentType: imageFile.type });
+    const imageUrl = await getDownloadURL(imageRef);
 
     await addDoc(collection(db, 'products'), {
       category,
@@ -317,11 +273,7 @@ productsBody.addEventListener('click', async event => {
       await updateDoc(doc(db, 'products', product.id), { available: !product.available, updatedAt: serverTimestamp() });
     } else if (button.dataset.productAction === 'delete' && window.confirm(`Supprimer « ${product.name} » du catalogue ?`)) {
       await deleteDoc(doc(db, 'products', product.id));
-      if (product.storagePath) {
-        await deleteObject(ref(storage, product.storagePath)).catch(error => {
-          console.warn('Produit supprimé, mais son image n’a pas pu être supprimée :', error);
-        });
-      }
+      if (product.storagePath) await deleteObject(ref(storage, product.storagePath)).catch(() => {});
     }
   } catch (error) {
     showError(dashboardMessage, `Modification impossible : ${error.message}`);
@@ -344,20 +296,3 @@ ordersList.addEventListener('click', async event => {
   }
 });
 
-if (firebaseConfigured && auth) {
-  onAuthStateChanged(auth, user => {
-    if (!user) {
-      stopProductsListener?.();
-      stopOrdersListener?.();
-      dashboard.hidden = true;
-      loginPanel.hidden = false;
-      return;
-    }
-    if (user.email?.toLowerCase() !== adminEmail.toLowerCase()) {
-      signOut(auth);
-      showError(loginMessage, 'Ce compte n’est pas autorisé à gérer la boutique.');
-      return;
-    }
-    startDashboard(user);
-  });
-}
